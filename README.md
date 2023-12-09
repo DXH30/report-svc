@@ -12,5 +12,11 @@ docker-compose up -d
 http://localhost:5000
 ```
 
+# How to test the service
+1. Just use the script
+```bash
+./tests/convert.sh
+```
+
 # Prerequisite
 1. Docker

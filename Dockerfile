@@ -17,4 +17,4 @@ EXPOSE 5000
 ENV NAME ReportApp 
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000","app:app"]
