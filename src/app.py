@@ -28,21 +28,25 @@ def convert_content_to_pdf():
     try:
         # Get input parameters from the request
         content = request.form.get('content')
+        email = request.form.get('email')
 
         # Generate a PDF from the content
         pdf_file_path = f'./output.pdf'
         create_pdf(content, pdf_file_path)
 
         # Forward the PDF to another API using the environment variable
-        files = {'pdf': open(pdf_file_path, 'rb')}
-        data = {'content': content}
+        files = {
+                'attachment': ('report.pdf', open(pdf_file_path, 'rb'), 'application/pdf')
+                }
+
+        data = {'email': email}
         response = requests.post(FORWARD_API_URL, files=files, data=data)
 
         # Optional: You may want to check the response from the forward API
         if response.status_code == 200:
             return jsonify({'status': 'success', 'message': 'PDF forwarded successfully'})
         else:
-            return jsonify({'status': 'error', 'message': 'Failed to forward PDF to API'})
+            return jsonify({'status': 'error', 'message': response.content, 'request': request})
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
